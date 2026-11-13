@@ -98,6 +98,10 @@ export struct AccessibilityShortKeyDialog {
           targetId = ResourceUtil.getStringSync($r('app.string.invert_color'));
           isEnabled = await config.invertColor.get();
           break;
+        case FunctionSelectOriginNameValue.CAPTIONS_ASSISTANT:
+          targetId = ResourceUtil.getStringSync($r('app.string.livecaptions579_title'));
+          isEnabled = Settings.getValueSync(getContext(this), 'vassistant_ai_caption_enable', 'false', DOMAIN_NAME) === 'true';
+          break;
         default:
           break;
       }

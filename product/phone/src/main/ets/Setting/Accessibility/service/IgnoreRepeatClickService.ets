@@ -33,66 +33,106 @@ const DISABLE_TRANSITION_ANIMATIONS_NOTIFICATION: string = 'disableTransitionAni
 const DISABLE_TRANSITION_ANIMATIONS_NOTIFICATION_KEY: string = 'transition_animations_notification';
  
 export default class IgnoreRepeatClickService extends ServiceExtensionAbility {
+  private requestQueue: Promise<void> = Promise.resolve();
+  private active: boolean = true;
+  private lifecycle: number = 0;
+  private latestStartId: number = 0;
+
   async onCreate(want: Want) {
+    this.active = true;
+    this.latestStartId = 0;
+    ++this.lifecycle;
     LogUtil.showInfo(TAG, 'onCreate');
   }
- 
-  onRequest(want: Want, startId: number) {
-    LogUtil.showInfo(TAG, `onRequest abilityName:${want?.abilityName} bundleName:${want?.bundleName} action:${want?.action?.toString()}`);
-    if (want?.action?.toString() === DISABLE_IGNORE_REPEAT_CLICK_SWITCH) {
-      this.disableIgnoreRepeatClickSwitch();
-      LogUtil.warn(`${TAG} disableIgnoreRepeatClickSwitch`);
-    } else if (want?.action?.toString() === DISABLE_IGNORE_REPEAT_CLICK_NOTIFICATION) {
-      this.disableIgnoreRepeatClickNotification();
-      LogUtil.warn(`${TAG} disableIgnoreRepeatClickNotification`);
-    } else if (want?.action?.toString() === REOPEN_TRANSITION_ANIMATIONS_SWITCH) {
-      this.reopenTransitionAnimationsSwitch();
-      LogUtil.warn(`${TAG} reOpenTransitionAnimations`);
-    } else if (want?.action?.toString() === DISABLE_TRANSITION_ANIMATIONS_NOTIFICATION) {
-      this.disableTransitionAnimationsNotification();
-      LogUtil.warn(`${TAG} disableTransitionAnimationsNotification`);
-    } else {
-      LogUtil.warn(`${TAG} no suitable action`);
+
+  onRequest(want: Want, startId: number): void {
+    if (!this.active) {
+      return;
+    }
+    const lifecycle: number = this.lifecycle;
+    this.latestStartId = startId;
+    const action: string = want?.action?.toString() ?? '';
+    LogUtil.showInfo(TAG, `onRequest abilityName:${want?.abilityName} bundleName:${want?.bundleName} action:${action}`);
+    // Serialize notification actions until the real configuration operation completes.
+    this.requestQueue = this.requestQueue.then(() => this.handleRequest(action, lifecycle))
+      .then(() => this.stopIfIdle(startId, lifecycle));
+  }
+
+  private async stopIfIdle(startId: number, lifecycle: number): Promise<void> {
+    if (!this.active || lifecycle !== this.lifecycle || this.latestStartId !== startId) {
+      return;
+    }
+    try {
+      const context = this.context;
+      const stopped: boolean = await context.terminateSelfIfStartId(startId);
+      if (this.active && lifecycle === this.lifecycle) {
+        LogUtil.info(`${TAG} conditional idle stop startId:${startId} accepted:${stopped}`);
+      }
+      // A newer AMS request makes stopped=false. Keep this queue usable for it.
+    } catch (e) {
+      if (this.active && lifecycle === this.lifecycle) {
+        LogUtil.error(`${TAG} conditional idle stop failed startId:${startId} code:${e?.code} message:${e?.message}`);
+      }
     }
   }
- 
+
+  private async handleRequest(action: string, lifecycle: number): Promise<void> {
+    if (!this.active || lifecycle !== this.lifecycle) {
+      return;
+    }
+    try {
+      if (action === DISABLE_IGNORE_REPEAT_CLICK_SWITCH) {
+        await this.disableIgnoreRepeatClickSwitch(lifecycle);
+      } else if (action === DISABLE_IGNORE_REPEAT_CLICK_NOTIFICATION) {
+        this.disableIgnoreRepeatClickNotification();
+      } else if (action === REOPEN_TRANSITION_ANIMATIONS_SWITCH) {
+        await this.reopenTransitionAnimationsSwitch(lifecycle);
+      } else if (action === DISABLE_TRANSITION_ANIMATIONS_NOTIFICATION) {
+        this.disableTransitionAnimationsNotification();
+      } else {
+        LogUtil.warn(`${TAG} no suitable action`);
+      }
+    } catch (e) {
+      if (this.active && lifecycle === this.lifecycle) {
+        LogUtil.error(`${TAG} action:${action} failed, code: ${e?.code} message: ${e?.message}`);
+      }
+    }
+  }
+
+
   onDisconnect(want: Want) {
     LogUtil.showInfo(TAG, 'onDisconnect');
   }
  
   onDestroy() {
+    this.active = false;
+    ++this.lifecycle;
     LogUtil.showInfo(TAG, 'onDestroy');
   }
  
-  private disableIgnoreRepeatClickSwitch() {
-    try {
-      IgnoreRepeatedStateModel.getInstance().ignoreRepeatClick = false;
-      config.ignoreRepeatClick.set(false);
-      HiSysEventUtil.reportDefaultBehaviorEventByUE(
-        HiSysAccessibilityEventGroup.IGNORE_REPEAT_TOUCHES_SWITCH, 'off');
-      LogUtil.info(`${TAG} ignoreRepeatClick set off success`);
-      return true;
-    } catch (e) {
-      LogUtil.error(`${TAG} ignoreRepeatClick set off failed, code: ${e?.code} message: ${e?.message}`);
-      return false;
+  private async disableIgnoreRepeatClickSwitch(lifecycle: number): Promise<void> {
+    await config.ignoreRepeatClick.set(false);
+    if (!this.active || lifecycle !== this.lifecycle) {
+      return;
     }
+    IgnoreRepeatedStateModel.getInstance().ignoreRepeatClick = false;
+    HiSysEventUtil.reportDefaultBehaviorEventByUE(
+      HiSysAccessibilityEventGroup.IGNORE_REPEAT_TOUCHES_SWITCH, 'off');
+    LogUtil.info(`${TAG} ignoreRepeatClick set off success`);
   }
  
   private disableIgnoreRepeatClickNotification() {
     SettingsDataUtils.setSecureValue(DISABLE_IGNORE_REPEAT_CLICK_NOTIFICATION_KEY, CLICK_SWITCH_OFF);
   }
 
-  private reopenTransitionAnimationsSwitch() {
-    try {
-      config.animationOff.set(false);
-      HiSysEventUtil.reportDefaultBehaviorEventByUE(
-        HiSysAccessibilityEventGroup.TRANSITION_ANIMATIONS_STATE, 'on');
-      LogUtil.info(`${TAG} animationOff set false success`);
-      return true;
-    } catch (e) {
-      LogUtil.error(`${TAG} animationOff set false failed, code: ${e?.code} message: ${e?.message}`);
-      return false;
+  private async reopenTransitionAnimationsSwitch(lifecycle: number): Promise<void> {
+    await config.animationOff.set(false);
+    if (!this.active || lifecycle !== this.lifecycle) {
+      return;
     }
+    HiSysEventUtil.reportDefaultBehaviorEventByUE(
+      HiSysAccessibilityEventGroup.TRANSITION_ANIMATIONS_STATE, 'on');
+    LogUtil.info(`${TAG} animationOff set false success`);
   }
  
   private disableTransitionAnimationsNotification() {

@@ -3,7 +3,6 @@
     "products": [
       {
         "name": "default",
-        "signingConfig": "release",
         "targetSdkVersion": 23,
         "compatibleSdkVersion": 23,
         "compileSdkVersion": "26.0.0",

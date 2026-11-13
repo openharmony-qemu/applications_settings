@@ -38,7 +38,7 @@ const TAG: string = 'FunctionSelectMenuController';
 export class FunctionSelectMenuController {
   private dataHelper: dataShare.DataShareHelper | null = null;
   private compId: string = '';
-  public static accessibilitySystemServiceList: string[] = ['HIGH_CONTRAST_TEXT', 'AUDIO_MONO', 'INVERT_COLOR'];
+  public static accessibilitySystemServiceList: string[] = ['HIGH_CONTRAST_TEXT', 'AUDIO_MONO', 'INVERT_COLOR', 'CAPTIONS_ASSISTANT'];
   public static shortKeyTargetsIdListCache: string[] = [];
   public static shortKeyTargetsIdList: string[] = [];
   public static selectExtensionService: string = '';
@@ -88,6 +88,9 @@ export class FunctionSelectMenuController {
         break;
       case FunctionSelectTargetNameValue.INVERT_COLOR:
         resourceStrValue = FUNCTION_SELECT_SERVICES_ARRAY[2];
+        break;
+      case FunctionSelectTargetNameValue.CAPTIONS_ASSISTANT:
+        resourceStrValue = FUNCTION_SELECT_SERVICES_ARRAY[3];
         break;
       default:
         break;

@@ -45,6 +45,7 @@
         },
         "build": {
             "sub_component": [
+                "//applications/standard/settings:settings_hap",
                 "//applications/standard/settings/napi/settings:settings",
                 "//applications/standard/settings/cj/settings:cj_settings_ffi",
                 "//applications/standard/settings/ani/settings:settings_ani",

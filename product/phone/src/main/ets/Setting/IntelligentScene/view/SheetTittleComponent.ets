@@ -73,6 +73,7 @@ export struct SheetTittleComponent {
           .fillColor($r('sys.color.icon_primary'))
           .draggable(false)
       }
+      .id('intelligent-scene-select-cancel')
       .accessibilityText($r('app.string.dialog_disable'))
       .width(40)
       .height(40)

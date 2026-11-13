@@ -1,0 +1,19 @@
+# Copyright (c) 2026 Harmony Contrib
+# SPDX-License-Identifier: Apache-2.0
+import("//build/ohos.gni")
+
+# Compile the real Stage UI and extensions instead of the stale phone HAP.
+ohos_app("settings_hap") {
+  deps = []
+  certificate_profile = "signature/settings.p7b"
+  hap_name = "Settings"
+  part_name = "settings"
+  subsystem_name = "applications"
+  module_install_dir = "app/com.ohos.settings"
+  sdk_home = "//prebuilts/ohos-sdk/linux"
+  sdk_type_name = [ "sdk.dir" ]
+  assemble_type = "assembleHap"
+  build_level = "module"
+  build_modules = [ "phone" ]
+  js_build_mode = "release"
+}

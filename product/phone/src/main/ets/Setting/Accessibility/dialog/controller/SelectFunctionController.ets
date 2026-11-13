@@ -20,7 +20,8 @@ import UIExtensionContentSession from '@ohos.app.ability.UIExtensionContentSessi
 import { LogUtil } from '@ohos/settings.common/src/main/ets/utils/LogUtil';
 import { HiSysEventUtil } from '@ohos/settings.common/src/main/ets/systemEvent/HiSysEventUtil';
 import { HiSysAccessibilityEventGroup } from '@ohos/settings.common/src/main/ets/systemEvent/BehaviorEventConsts';
-import { AbilityUtils } from '@ohos/settings.common/src/main/ets/utils/AbilityUtils';
+import common from '@ohos.app.ability.common';
+import { AbilityContextManager } from '@ohos/settings.common/src/main/ets/ability/AbilityContextManager';
 import { FunctionSelectOriginNameValue } from '../../constant/Constants';
 import { HighContrastTextSwitchController } from '../../controller/HighContrastTextSwitchController';
 
@@ -67,14 +68,18 @@ export class MultiCheckboxController {
     }
   }
 
-  private openCaptionAbility(state: boolean): void {
-    let uriAddress: string = state ? 'hw://vassistant/caption?action=close' : '';
+  private async openCaptionAbility(state: boolean): Promise<void> {
+    let uriAddress: string = state ? 'ohos://vassistant/caption?action=close' : '';
     let want: Want = {
       'bundleName': 'com.ohos.vassistant',
       'abilityName': 'AiCaptionServiceExtAbility',
       'uri': uriAddress
     };
-    AbilityUtils.startAbility(want);
+    const context = AbilityContextManager.getContext() as common.UIExtensionContext;
+    if (context === undefined || context === null) {
+      throw new Error('Actual Settings accessibility dialog context is absent');
+    }
+    await context.startAbility(want);
   }
 
   async enabledSelectFunction(target: string, state: boolean): Promise<boolean> {
@@ -90,6 +95,9 @@ export class MultiCheckboxController {
         break;
       case FunctionSelectOriginNameValue.INVERT_COLOR:
         await config.invertColor.set(!state);
+        break;
+      case FunctionSelectOriginNameValue.CAPTIONS_ASSISTANT:
+        await this.openCaptionAbility(state);
         break;
       default:
         break;

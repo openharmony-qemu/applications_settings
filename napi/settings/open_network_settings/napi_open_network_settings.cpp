@@ -26,7 +26,7 @@ namespace OHOS {
 namespace Settings {
 static constexpr const char* NFC_SYSTEM_CAPABILITY = "const.SystemCapability.Communication.NFC.Core";
 static constexpr const char* NFC_NOT_SUPPORT_KEY = "const.nfc.not_support";
-static constexpr const char* SETTINGS_MAIN_ABILITY_NAME = "com.huawei.hmos.settings.MainAbility";
+static constexpr const char* SETTINGS_MAIN_ABILITY_NAME = "com.ohos.settings.MainAbility";
 static constexpr const int32_t SETTINGS_START_PAGE_FAILED_CODE = 16900020;
 static constexpr const int32_t DEFAULT_INVAL_VALUE = -1;
 
@@ -34,7 +34,7 @@ const std::string UIEXTENSION_TYPE_KEY = "ability.want.params.uiExtensionType";
 const std::string CONTEXT_TYPE_KEY = "storeKit.ability.contextType";
 
 const std::string UIEXTENSION_TYPE_VALUE = "sys/commonUI";
-const std::string SETTINGS_PACKAGE_NAME = "com.huawei.hmos.settings";
+const std::string SETTINGS_PACKAGE_NAME = "com.ohos.settings";
 const std::string SETTINGS_ABILITY_NAME = "OpenNetworkUIExtensionAbility";
 const std::string SETTINGS_COMMON_EXTERNAL_PAGE_NAME = "ExternalCommonUIExtensionAbility";
 const std::string UI_ABILITY_CONTEXT_VALUE = "uiAbility";

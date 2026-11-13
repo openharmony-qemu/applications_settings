@@ -69,13 +69,23 @@ export struct ThemeSettings {
   @State params: PushParam | null = null;
   @State isFromSearch: boolean = false;
   @State routerName: string = 'settingsThemePage';
+  @State private wallpaperOpening: boolean = false;
+  private wallpaperEntrySession: number = 0;
+  @State private wallpaperEntryError: string = '';
   @StorageProp('navDesDynamicPadding') navDesDynamicPadding: number = AppStorage.get<number>('navDesDynamicPadding') as number;
 
   build() {
     NavDestination() {
-      if (IS_DEVICE_PC) {
-        MenuPcPageComponent({ menuPage: this.pageRoot.menuPage })
-      }
+      Column({ space: 16 }) {
+        Button($r('app.string.wallpaper_title')).id('settings_wallpaper_entry')
+          .enabled(!this.wallpaperOpening).onClick(() => { this.openWallpaperPicker(); })
+        if (this.wallpaperEntryError.length > 0) {
+          Text(this.wallpaperEntryError).id('settings_wallpaper_entry_error')
+        }
+        if (IS_DEVICE_PC) {
+          MenuPcPageComponent({ menuPage: this.pageRoot.menuPage })
+        }
+      }.width('100%').height('100%')
     }
     .hideTitleBar(!IS_DEVICE_PC)
     .title(DeviceUtil.isDevicePc() ? this.title : pageNavTitle(this.title, this.pagePaddingStart))
@@ -112,6 +122,25 @@ export struct ThemeSettings {
     }
     if (IS_DEVICE_PC) {
       this.pageRoot.aboutToAppear(new ThemePagePc(this.pathInfos, this.params as PushParam));
+    }
+  }
+
+  private async openWallpaperPicker(): Promise<void> {
+    if (this.wallpaperOpening) { return; }
+    const session = this.wallpaperEntrySession;
+    this.wallpaperOpening = true;
+    this.wallpaperEntryError = '';
+    try {
+      await DynamicLoader.getInstance().fire(NavEntryKey.WALLPAPER_PICKER_ENTRY);
+      if (session === this.wallpaperEntrySession) {
+        this.pathInfos.pushPathByName(NavEntryKey.WALLPAPER_PICKER_ENTRY, null);
+      }
+    } catch (error) {
+      const actual = error as BusinessError;
+      if (session === this.wallpaperEntrySession) { this.wallpaperEntryError = actual.message; }
+      LogUtil.error(`Wallpaper entry load failed ${actual.code}: ${actual.message}`);
+    } finally {
+      if (session === this.wallpaperEntrySession) { this.wallpaperOpening = false; }
     }
   }
 
@@ -184,6 +213,8 @@ export struct ThemeSettings {
   }
 
   aboutToDisappear(): void {
+    ++this.wallpaperEntrySession;
+    this.wallpaperOpening = false;
     LogUtil.info(`${TAG} aboutToDisappear`);
     this.pageRoot.aboutToDisappear();
     // 销毁平板页面横竖屏监听器
@@ -193,6 +224,8 @@ export struct ThemeSettings {
   }
 
   onPageShow(): void {
+    ++this.wallpaperEntrySession;
+    this.wallpaperOpening = false;
     LogUtil.info(`${TAG} onPageShow`);
     this.pageRoot.onPageShow();
     DynamicLoader.getInstance().pageTransitionSuccess(TAG);
@@ -203,6 +236,8 @@ export struct ThemeSettings {
   }
 
   onPageHide(): void {
+    ++this.wallpaperEntrySession;
+    this.wallpaperOpening = false;
     LogUtil.info(`${TAG} onPageHide`);
     if (!IS_DEVICE_PC) {
       if (this.pathInfos.getParamByName(NavEntryKey.THEME_ENTRY)?.length !== 0) {

@@ -1,5 +1,6 @@
 {
   "src": [
+    "pages/input/ExternalInputSettings",
     "pages/home/ExternalSettingsHome",
     "Setting/Wlan/ExternalNetworkPageComponent",
     "pages/home/SettingsHome",
@@ -34,6 +35,8 @@
     "pages/display/view/KeyMouseDisplaySetting",
     "Setting/Wlan/PcModeWifiWindowSettings",
     "Setting/MobileNetwork/HotSpot/HotspotWindowPage",
-    "Setting/Volume/SoundModeWindowPage"
+    "Setting/Volume/SoundModeWindowPage",
+    "pages/SharePicker",
+    "pages/ChoosePicker"
   ]
 }

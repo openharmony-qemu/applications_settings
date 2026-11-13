@@ -767,6 +767,10 @@ void InitConstClassByName(napi_env env, napi_value exports, std::string name)
     napi_define_class(env, name.c_str(), NAPI_AUTO_LENGTH, ClassConstructor, nullptr,
         sizeof(descriptors) / sizeof(*descriptors), descriptors, &result);
     napi_set_named_property(env, exports, name.c_str(), result);
+    if (name == TTS_CLASS_NAME) {
+        // The public SDK spells this namespace TTS; keep the existing alias.
+        napi_set_named_property(env, exports, "TTS", result);
+    }
 }
 
 napi_value InitNapiClass(napi_env env, napi_value exports)

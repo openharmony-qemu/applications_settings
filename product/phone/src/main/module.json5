@@ -262,9 +262,27 @@
         "label": "$string:add_computer_account",
         "startWindowIcon": "$media:adaptiveIcon",
         "startWindowBackground": "$color:color_default_white"
+      },
+      {
+        "name": "PickerDialog",
+        "srcEntry": "./ets/Setting/SharePicker/ChoosePickerAbility.ets",
+        "launchType": "standard",
+        "exported": false,
+        "icon": "$media:adaptiveIcon",
+        "label": "$string:settings_title",
+        "startWindowIcon": "$media:adaptiveIcon",
+        "startWindowBackground": "$color:color_default_white",
+        "removeMissionAfterTerminate": true
       }
     ],
     "extensionAbilities": [
+      {
+        "name": "SharePickerExtensionAbility",
+        "srcEntry": "./ets/Setting/SharePicker/SharePickerExtension.ets",
+        "type": "sysPicker/share",
+        "exported": true,
+        "extensionProcessMode": "instance"
+      },
       {
         "name": "SettingsStatusReportSchedulerExtensionAbility",
         "srcEntry": "./ets/MainAbility/SettingsStatusReportSchedulerExtension.ets",
@@ -345,6 +363,13 @@
         "permissions": [
           "ohos.permission.ACCESS_SYSTEM_SETTINGS"
         ]
+      },
+      {
+        "name": "ExternalCommonUIExtensionAbility",
+        "srcEntrance": "./ets/MainAbility/ExternalCommonUIExtensionAbility.ets",
+        "type": "sys/commonUI",
+        "extensionProcessMode": "instance",
+        "exported": true
       },
       {
         "name": "OpenNetworkUIExtensionAbility",
@@ -712,6 +737,9 @@
       }
     ],
     "requestPermissions": [
+      {
+        "name": "ohos.permission.SET_WALLPAPER"
+      },
       {
         "name": "ohos.permission.ACCESS_LOWPOWER_MANAGER",
         "reason": "$string:permission_reason_access_account",

@@ -129,6 +129,7 @@ export struct AppListItemComponent {
       .constraintSize({
         minHeight: '64vp'
       })
+      .id('intelligent-scene-app-' + (this.item?.name ?? ''))
       .onClick(() => {
         if (this.item) {
           this.item.isSelected = !this.item.isSelected;

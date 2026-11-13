@@ -177,6 +177,7 @@ export struct ReConfirmDialogComponent {
         .margin({ left: 8, right: 8 })
 
       Button($r('app.string.accessibility_enable'))
+        .id('accessibility-shortcut-confirm-enable')
         .fontFamily('HarmonyHeiTi')
         .fontWeight(FontWeight.Medium)
         .fontSize($r('sys.float.Body_L'))
@@ -229,6 +230,7 @@ export struct ReConfirmDialogComponent {
           .fontWeight(FontWeight.Regular)
           .maxFontScale(2)
       }
+      .id('accessibility-shortcut-confirm-enable')
       .backgroundColor($r('app.color.transparent'))
       .width('100%')
       .onClick(() => {

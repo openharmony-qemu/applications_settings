@@ -183,6 +183,7 @@ export struct AppAndMetaServicesComponent {
   @Builder
   searchBarView(): void {
     Search({ value: $$this.changeValue, placeholder: $r('app.string.setting_search'), controller: this.controller })
+      .id('intelligent-scene-app-search')
       .margin({
         top: $r('sys.float.padding_level4'),
         bottom: $r('sys.float.padding_level5')

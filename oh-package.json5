@@ -1,7 +1,7 @@
 {
   "modelVersion": "6.0.0",
   "devDependencies": {
-    "@ohos/hypium": "1.0.16"
+    "@ohos/hypium": "file:./hypium-1.0.16.har"
   },
   "name": "settings",
   "description": "",

@@ -65,6 +65,9 @@ export struct AccessibilityReConfirmDialog {
           case FunctionSelectOriginNameValue.INVERT_COLOR:
             targetsString = targetsString + ResourceUtil.getStringSync($r('app.string.invert_color'));
             break;
+          case FunctionSelectOriginNameValue.CAPTIONS_ASSISTANT:
+            targetsString = targetsString + ResourceUtil.getStringSync($r('app.string.livecaptions579_title'));
+            break;
           default:
             break;
         }

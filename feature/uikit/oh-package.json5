@@ -5,6 +5,6 @@
   "version": "1.0.0",
   "dependencies": {
     "@ohos/settings.common": "file:../../common",
-    "@ohos/mpchart": "3.0.15"
+    "@ohos/mpchart": "file:../../mpchart-3.0.15.har"
   }
 }

@@ -198,12 +198,14 @@ export const FUNCTION_SELECT_SERVICES_ARRAY: ResourceStr[] = [
   $r('app.string.highContrast_text'),
   $r('app.string.single_audio'),
   $r('app.string.invert_color'),
+  $r('app.string.livecaptions579_title'),
 ];
 
 export enum FunctionSelectTargetNameValue {
   HIGH_CONTRAST_TEXT = 'HIGH_CONTRAST_TEXT',
   SINGLE_AUDIO = 'AUDIO_MONO',
-  INVERT_COLOR = 'INVERT_COLOR'
+  INVERT_COLOR = 'INVERT_COLOR',
+  CAPTIONS_ASSISTANT = 'CAPTIONS_ASSISTANT'
 }
 
 export enum FunctionSelectOriginNameValue {
@@ -211,12 +213,14 @@ export enum FunctionSelectOriginNameValue {
   SINGLE_AUDIO = 'AUDIO_MONO',
   INVERT_COLOR = 'INVERT_COLOR',
   SCREEN_READER = 'com.ohos.screenreader/AccessibilityExtAbility',
+  CAPTIONS_ASSISTANT = 'CAPTIONS_ASSISTANT',
 }
 
 export const FUNCTION_SELECT_TARGET_NAME_ARRAY: string[] = [
   'HIGH_CONTRAST_TEXT',
   'AUDIO_MONO',
   'INVERT_COLOR',
+  'CAPTIONS_ASSISTANT',
 ]
 
 export interface ExtensionInfo {

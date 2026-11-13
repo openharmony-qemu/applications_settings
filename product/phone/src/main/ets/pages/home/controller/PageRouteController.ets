@@ -82,6 +82,7 @@ const PAGE_PATH_MAP: Map<string, string> = new Map<string, string>([
   [NavEntryKey.FAR_FIELD_COMMUNICATION_SERVICE_PRIVACY, '../../Setting/MoreConnection/FarFieldCommunicationPage'],
   [NavEntryKey.THEME_ENTRY, '../../Setting/Theme/ThemePage'],
   [NavEntryKey.DISPLAY_ENTRY, '../../Setting/Display/DisplaySettingsPage'],
+  ['screen_refresh_rate_entry', '../../Setting/Display/QemuRefreshRatePage'],
   [NavEntryKey.VOLUME_ENTRY, '../../Setting/Volume/VolumeSettingsPage'],
   [NavEntryKey.SOUND_EFFECT_DETAIL, '../../Setting/Volume/SoundEffectDetailPage'],
   [NavEntryKey.PHONE_NOTIFICATION_SETTINGS_ENTRY, '../../Setting/SystemUi/SystemUiPage'],

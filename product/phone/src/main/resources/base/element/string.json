@@ -9121,6 +9121,10 @@
                        "attr":  {
                                     "priority":  "LT"
                                 }
+                   },
+                   {
+                       "name": "livecaptions579_title",
+                       "value": "Live captions (English)"
                    }
                ]
 }

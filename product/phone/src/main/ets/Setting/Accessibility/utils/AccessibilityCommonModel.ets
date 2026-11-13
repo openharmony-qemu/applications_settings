@@ -72,6 +72,9 @@ export class AccessibilityCommonModel {
       case FunctionSelectOriginNameValue.INVERT_COLOR:
         selectName = await ResourceUtil.getString($r('app.string.invert_color'));
         break;
+      case FunctionSelectOriginNameValue.CAPTIONS_ASSISTANT:
+        selectName = await ResourceUtil.getString($r('app.string.livecaptions579_title'));
+        break;
       default:
         if (selectName) {
           LogUtil.info(`${TAG} getSelectAbilityName  ${selectName}`);
@@ -97,6 +100,9 @@ export class AccessibilityCommonModel {
         break;
       case FunctionSelectOriginNameValue.INVERT_COLOR:
         selectName = $r('app.string.invert_color');
+        break;
+      case FunctionSelectOriginNameValue.CAPTIONS_ASSISTANT:
+        selectName = $r('app.string.livecaptions579_title');
         break;
       default:
         if (selectName) {

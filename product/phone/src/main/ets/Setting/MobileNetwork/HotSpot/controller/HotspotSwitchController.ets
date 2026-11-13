@@ -342,10 +342,16 @@ export class HotspotSwitchController implements ComponentControl, SharableTarget
 
   setStateChangeTimeoutTimer(): void {
     this.stateChangeTimeoutId = setTimeout(() => {
+      this.stateChangeTimeoutId = null;
       try {
-        if (this.isHotspotOn === wifiManager?.isHotspotActive()) {
+        const active: boolean = wifiManager.isHotspotActive();
+        if (this.isHotspotOn === active && this.getChecked() === active) {
+          this.isWaitingLastActionDone = false;
           return;
         }
+        this.isWaitingLastActionDone = false;
+        this.isHotspotOn = active;
+        this.updateStatus();
       } catch (error) {
         LogUtil.error(`${TAG} get isHotspotActive fail`);
       }

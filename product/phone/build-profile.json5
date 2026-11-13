@@ -88,6 +88,7 @@
           "./src/main/ets/Setting/Display/DisplaySettingsPage.ets",
           "./src/main/ets/Setting/Display/DarkModeSettingPage.ets",
           "./src/main/ets/Setting/Display/ScreenZoomSettingPage.ets",
+          "./src/main/ets/Setting/Display/QemuRefreshRatePage.ets",
           "./src/main/ets/Setting/Display/LandscapeStartSettingPage.ets",
           // 情景模式
           "./src/main/ets/Setting/System/SystemNavigationPage.ets",
